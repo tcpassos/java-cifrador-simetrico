@@ -1,4 +1,4 @@
-package cipher;
+package cipher.util;
 
 /**
  * Classe com metodos utilitarios para a permutacao de bits.
