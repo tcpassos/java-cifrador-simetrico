@@ -7,6 +7,12 @@ import java.math.BigInteger;
  */
 public class JoinOperations {
     
+    /**
+     * Agrupa um conjunto de bytes em um unico valor
+     *
+     * @param bytes Bytes a serem agrupados
+     * @return {@code BigInteger}
+     */
     public static BigInteger joinBytes(int ... bytes) {
         return join(Byte.SIZE, bytes);
     }
