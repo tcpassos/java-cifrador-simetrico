@@ -16,12 +16,43 @@ public class Permutations {
      * @param source Array original
      * @return {@code int[]}
      */
-    public static int[] permutateP(int[] source) {
+    public static int[] permuteP(int[] source) {
         int[] permutedArray = new int[32];
         for (int i=0; i<P_TABLE.length; i++) {
-            permutedArray[i] = source[ P_TABLE[i] ];
+            permutedArray[i] = source[ P_TABLE[i] - 1 ];
         }
         return permutedArray;
     }
+
+    public static Boolean[] permuteP(Boolean[] source) {
+        Boolean[] permutedArray = new Boolean[32];
+        for (int i=0; i<P_TABLE.length; i++) {
+            permutedArray[i] = source[ P_TABLE[i] - 1 ];
+        }
+        return permutedArray;
+    }
+
+    /**
+     * Retorna os elementos permutados pela funcao P para sua ordem original
+     *
+     * @param source Array permutado em P
+     * @return {@code int[]}
+     */
+    public static int[] unpermuteP(int[] source) {
+        int[] nonPermutedArray = new int[32];
+        for (int i=0; i<P_TABLE.length; i++) {
+            nonPermutedArray[P_TABLE[i] - 1] = source[ i ];
+        }
+        return nonPermutedArray;
+    }
+
+    public static Boolean[] unpermuteP(Boolean[] source) {
+        Boolean[] nonPermutedArray = new Boolean[32];
+        for (int i=0; i<P_TABLE.length; i++) {
+            nonPermutedArray[P_TABLE[i] - 1] = source[ i ];
+        }
+        return nonPermutedArray;
+    }
+    
     
 }
