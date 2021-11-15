@@ -3,7 +3,10 @@ package cipher;
 import cipher.bean.PassonConstants;
 import static cipher.util.JoinOperations.join;
 import static cipher.util.JoinOperations.joinBytes;
+import cipher.util.Permutations;
 import static cipher.util.ShiftOperations.circularShiftLeft;
+import static cipher.util.SplitOperations.getByteSegments;
+import java.math.BigInteger;
 
 /**
  * Classe responsavel pela geracao das subchaves do algoritmo.
@@ -18,7 +21,11 @@ public class PassonKey implements PassonConstants {
      */
     public static long[] generateKeys(String originalKey) {
         long[] keys = new long[ROUND_COUNT];
-        int[] keyArray = _toIntArray(originalKey);
+        int[] keyArray = getByteSegments(originalKey);
+        // Realiza a permutacao da chave usando a tabela P
+        BigInteger joinedKey = Permutations.permute32((joinBytes(keyArray)));
+        // Aplica a S-Box
+        keyArray = SBox.transform(getByteSegments(joinedKey, 4));
         for (int round=0; round<ROUND_COUNT; round++) {
             int[][] m = _generateMatrix(keyArray);
             int left  = joinBytes(m[0]).xor(joinBytes(circularShiftLeft(m[2], 1))).intValue();
@@ -60,17 +67,4 @@ public class PassonKey implements PassonConstants {
         return matrix;
     }
 
-    /**
-     * Converte uma String para um array com os caracteres representados por inteiros
-     *
-     * @param str String a ser convertida
-     * @return {@code int[]}
-     */
-    private static int[] _toIntArray(String str) {
-        int[] arr = new int[str.length()];
-        for (int i = 0; i < arr.length; i++) {
-            arr[i] = Character.digit(str.charAt(i), 10);
-        }
-        return arr;
-    }
 }

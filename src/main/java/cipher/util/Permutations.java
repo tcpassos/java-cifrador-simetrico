@@ -1,5 +1,7 @@
 package cipher.util;
 
+import java.math.BigInteger;
+
 /**
  * Classe com metodos utilitarios para a permutacao de bits.
  */
@@ -11,48 +13,21 @@ public class Permutations {
                                            19, 13, 30,  6, 22, 11,  4, 25 };
     
     /**
-     * Permuta os elementos do array informado de acordo com a funcao P
+     * Permuta os bits do valor informado de acordo com a funcao P
      *
-     * @param source Array original
-     * @return {@code int[]}
-     */
-    public static int[] permuteP(int[] source) {
-        int[] permutedArray = new int[32];
-        for (int i=0; i<P_TABLE.length; i++) {
-            permutedArray[i] = source[ P_TABLE[i] - 1 ];
+     * @param source Valor original
+     * @return {@code BigInteger}
+     */    
+    public static BigInteger permute32(BigInteger source) {
+        BigInteger permutedValue = BigInteger.ZERO;
+        for (int bitIndex=P_TABLE.length-1; bitIndex>=0; bitIndex--) {
+            int tableIndex = P_TABLE.length - bitIndex - 1;
+            if (!source.testBit(P_TABLE.length - P_TABLE[tableIndex])) {
+                continue;
+            }            
+            permutedValue = permutedValue.setBit(bitIndex);
         }
-        return permutedArray;
-    }
-
-    public static Boolean[] permuteP(Boolean[] source) {
-        Boolean[] permutedArray = new Boolean[32];
-        for (int i=0; i<P_TABLE.length; i++) {
-            permutedArray[i] = source[ P_TABLE[i] - 1 ];
-        }
-        return permutedArray;
-    }
-
-    /**
-     * Retorna os elementos permutados pela funcao P para sua ordem original
-     *
-     * @param source Array permutado em P
-     * @return {@code int[]}
-     */
-    public static int[] unpermuteP(int[] source) {
-        int[] nonPermutedArray = new int[32];
-        for (int i=0; i<P_TABLE.length; i++) {
-            nonPermutedArray[P_TABLE[i] - 1] = source[ i ];
-        }
-        return nonPermutedArray;
-    }
-
-    public static Boolean[] unpermuteP(Boolean[] source) {
-        Boolean[] nonPermutedArray = new Boolean[32];
-        for (int i=0; i<P_TABLE.length; i++) {
-            nonPermutedArray[P_TABLE[i] - 1] = source[ i ];
-        }
-        return nonPermutedArray;
-    }
-    
+        return permutedValue;
+    }    
     
 }
