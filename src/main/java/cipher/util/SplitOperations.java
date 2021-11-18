@@ -6,7 +6,7 @@ import java.math.BigInteger;
  * Classe com metodos para a segmentacao de valores.
  */
 public class SplitOperations {
-    
+
     /**
      * Segmenta um valor inteiro em uma quantidade n de bytes
      *

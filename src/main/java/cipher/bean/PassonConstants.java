@@ -6,5 +6,6 @@ package cipher.bean;
 public interface PassonConstants {
     
     public static final int ROUND_COUNT = 5;
+    public static final int BLOCK_SIZE = 6;
     
 }

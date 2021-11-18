@@ -31,6 +31,16 @@ public class Permutations {
     }
 
     /**
+     * Retorna os elementos permutados pela tabela de 32 bits para sua ordem original
+     *
+     * @param source Valor permutado
+     * @return {@code BigInteger}
+     */    
+    public static BigInteger unpermute32(BigInteger source) {
+        return _unpermute(source, P_TABLE_32);
+    }
+
+    /**
      * Permuta os bits do valor informado de acordo com a tabela de permutacao de 48 bits
      *
      * @param source Valor original
@@ -38,6 +48,16 @@ public class Permutations {
      */    
     public static BigInteger permute48(BigInteger source) {
         return _permute(source, P_TABLE_48);
+    }
+
+    /**
+     * Retorna os elementos permutados pela tabela de 48 bits para sua ordem original
+     *
+     * @param source Valor permutado
+     * @return {@code BigInteger}
+     */    
+    public static BigInteger unpermute48(BigInteger source) {
+        return _unpermute(source, P_TABLE_48);
     }
     
     private static BigInteger _permute(BigInteger source, int[] map) {
@@ -49,6 +69,17 @@ public class Permutations {
             }            
         }
         return permutedValue;
+    }
+
+    private static BigInteger _unpermute(BigInteger source, int[] map) {
+        BigInteger unpermutedValue = BigInteger.ZERO;
+        for (int bitIndex=map.length-1; bitIndex>=0; bitIndex--) {
+            int tableIndex = map.length - bitIndex - 1;
+            if (source.testBit(bitIndex)) {
+                unpermutedValue = unpermutedValue.setBit(map.length - map[tableIndex]);
+            }            
+        }
+        return unpermutedValue;
     }
     
 }

@@ -1,6 +1,10 @@
 package ui;
 
+import cipher.PassonCipher;
 import java.io.File;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 
 /**
@@ -10,6 +14,7 @@ public class CipherWindow extends javax.swing.JFrame {
 
     private File file;
     private JFileChooser fileChooser;
+    private PassonCipher encryptor;
     
     /**
      * Creates new form CipherWindow
@@ -110,17 +115,26 @@ public class CipherWindow extends javax.swing.JFrame {
     private void jFileChooserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jFileChooserActionPerformed
         if (fileChooser.showOpenDialog(CipherWindow.this) == JFileChooser.APPROVE_OPTION) {
             file = fileChooser.getSelectedFile();
+            encryptor = new PassonCipher(file);
             jFilePath.setText(file.getAbsolutePath());
         }
     }//GEN-LAST:event_jFileChooserActionPerformed
 
-    private void jDecryptButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jDecryptButtonActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jDecryptButtonActionPerformed
-
     private void jEncryptButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jEncryptButtonActionPerformed
-        // TODO add your handling code here:
+        try {
+            encryptor.encrypt(jPasswordField.getText());
+        } catch (IOException ex) {
+            Logger.getLogger(CipherWindow.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jEncryptButtonActionPerformed
+
+    private void jDecryptButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jDecryptButtonActionPerformed
+        try {
+            encryptor.decrypt(jPasswordField.getText());
+        } catch (IOException ex) {
+            Logger.getLogger(CipherWindow.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jDecryptButtonActionPerformed
 
     /**
      * @param args the command line arguments
