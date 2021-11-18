@@ -14,6 +14,8 @@ import java.io.OutputStream;
 import java.math.BigInteger;
 import java.util.Arrays;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 /**
  * Classe responsavel pela criptografia em blocos.
  */
@@ -68,11 +70,13 @@ public class PassonCipher implements PassonConstants {
 
     private int[] _decryptBlock(byte[] block, long[] keys) {
         BigInteger decryptedBlock = JoinOperations.joinBytes(block);
+        ArrayUtils.reverse(keys);
         for(long key: keys) {
-            decryptedBlock = Permutations.unpermute48(decryptedBlock);
-            // TODO: Aplicar S-Box
-            decryptedBlock = decryptedBlock.xor(BigInteger.valueOf(key));
             // TODO: Gerar e aplicar funcoes no o vetor
+            decryptedBlock = decryptedBlock.xor(BigInteger.valueOf(key));
+            // TODO: Aplicar S-Box
+            decryptedBlock = Permutations.unpermute48(decryptedBlock);
+
         }
         return SplitOperations.getByteSegments(decryptedBlock, keys.length);
     }
