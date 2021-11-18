@@ -14,7 +14,6 @@ import java.io.OutputStream;
 import java.math.BigInteger;
 import java.util.Arrays;
 
-import org.apache.commons.lang3.ArrayUtils;
 
 /**
  * Classe responsavel pela criptografia em blocos.
@@ -70,7 +69,7 @@ public class PassonCipher implements PassonConstants {
 
     private int[] _decryptBlock(byte[] block, long[] keys) {
         BigInteger decryptedBlock = JoinOperations.joinBytes(block);
-        ArrayUtils.reverse(keys);
+        _invertArray(keys);
         for(long key: keys) {
             // TODO: Gerar e aplicar funcoes no o vetor
             decryptedBlock = decryptedBlock.xor(BigInteger.valueOf(key));
@@ -93,6 +92,14 @@ public class PassonCipher implements PassonConstants {
             filename = filename.substring(0, filename.lastIndexOf('.'));
         }
         return filename;
+    }
+    
+    private void _invertArray(long[] array) {
+        for (int i = 0; i < array.length / 2; i++) {
+            long temp = array[i];
+            array[i] = array[array.length - 1 - i];
+            array[array.length - 1 - i] = temp;
+        }
     }
 
 }
