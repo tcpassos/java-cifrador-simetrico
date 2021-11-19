@@ -7,5 +7,6 @@ public interface BlockCipher {
     
     public int[] encrypt(int[] block);
     public int[] decrypt(int[] block);
+    public int getBlockSize();
     
 }

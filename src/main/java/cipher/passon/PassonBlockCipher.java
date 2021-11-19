@@ -1,6 +1,7 @@
 package cipher.passon;
 
 import cipher.BlockCipher;
+import cipher.SBox;
 import cipher.util.JoinOperations;
 import cipher.util.Permutations;
 import cipher.util.SplitOperations;
@@ -22,7 +23,7 @@ public class PassonBlockCipher implements BlockCipher, PassonConstants {
         BigInteger encryptedBlock = JoinOperations.joinBytes(block);
         for(long key: keys) {
             encryptedBlock = Permutations.permute48(encryptedBlock);
-            // encryptedBlock = SBox.transform(encryptedBlock, BLOCK_SIZE);
+            encryptedBlock = SBox.transform(encryptedBlock, BLOCK_SIZE);
             encryptedBlock = encryptedBlock.xor(BigInteger.valueOf(key));
             // TODO: Gerar e aplicar funcoes no o vetor
         }
@@ -36,7 +37,7 @@ public class PassonBlockCipher implements BlockCipher, PassonConstants {
         for(long key: keys) {
             // TODO: Gerar e aplicar funcoes no o vetor
             decryptedBlock = decryptedBlock.xor(BigInteger.valueOf(key));
-            // decryptedBlock = SBox.reverse(decryptedBlock, BLOCK_SIZE);
+            decryptedBlock = SBox.reverse(decryptedBlock, BLOCK_SIZE);
             decryptedBlock = Permutations.unpermute48(decryptedBlock);
         }
         return SplitOperations.getByteSegments(decryptedBlock, block.length);
@@ -48,6 +49,11 @@ public class PassonBlockCipher implements BlockCipher, PassonConstants {
             array[i] = array[array.length - 1 - i];
             array[array.length - 1 - i] = temp;
         }
+    }
+
+    @Override
+    public int getBlockSize() {
+        return BLOCK_SIZE;
     }
 
 }

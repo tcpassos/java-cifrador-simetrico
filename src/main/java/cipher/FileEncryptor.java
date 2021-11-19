@@ -1,6 +1,5 @@
 package cipher;
 
-import static cipher.passon.PassonConstants.BLOCK_SIZE;
 import cipher.blockstream.InputBlockStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -23,11 +22,12 @@ public class FileEncryptor {
     }
     
     public void encrypt() throws IOException {
-        int[] block = new int[BLOCK_SIZE];
+        int[] block = new int[blockCipher.getBlockSize()];
         File outputFile = new File(file.getParent(), file.getName() + ".pson");
         try (FileInputStream reader = new FileInputStream(file);
              FileOutputStream writer = new FileOutputStream(outputFile)) {
-            InputBlockStream bstream = new InputBlockStream(reader, BLOCK_SIZE);
+            InputBlockStream bstream = new InputBlockStream(reader, blockCipher.getBlockSize());
+            _writeHeaders(writer);
             // Le o arquivo enquanto existirem bytes disponiveis
             while(bstream.hasNext()) {
                 Arrays.fill(block, (byte) 0);
@@ -38,13 +38,13 @@ public class FileEncryptor {
     }
 
     public void decrypt() throws IOException {
-        int[] block = new int[BLOCK_SIZE];
+        int[] block = new int[blockCipher.getBlockSize()];
         File outputFile = new File(file.getParent(), _getFileNameWithoutExtension(file));
         try (FileInputStream reader = new FileInputStream(file);
              FileOutputStream writer = new FileOutputStream(outputFile)) {
-            InputBlockStream bstream = new InputBlockStream(reader, BLOCK_SIZE);
+            InputBlockStream bstream = new InputBlockStream(reader, blockCipher.getBlockSize());
             // Le o arquivo enquanto existirem bytes disponiveis
-            while(reader.available() > 0) {
+            while(bstream.hasNext()) {
                 Arrays.fill(block, (byte) 0);
                 block = bstream.nextBlock();
                 _writeBytes(writer, blockCipher.decrypt(block));
@@ -64,6 +64,13 @@ public class FileEncryptor {
         for(int b: bytes) {
             writer.write(b);
         }
+    }
+    
+    private void _writeHeaders(OutputStream writer) throws IOException {
+        int blockSize = blockCipher.getBlockSize();
+        int remainder = (int) (file.length() % blockSize);
+        int padding = remainder == 0 ? 0 : blockSize - remainder;
+        writer.write(padding);
     }
 
 }

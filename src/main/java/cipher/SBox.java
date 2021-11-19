@@ -74,8 +74,8 @@ public class SBox {
     }
 
     private static int _apply(int b, int[][] table) {
-        int line = 0xF & b;
-        int column = 0xF & (b >> 4);
+        int column = 0xF & b;
+        int line = 0xF & (b >> 4);
         return table[line][column];
     }
     
