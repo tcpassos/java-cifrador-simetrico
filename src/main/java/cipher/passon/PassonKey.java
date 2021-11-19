@@ -1,6 +1,6 @@
-package cipher;
+package cipher.passon;
 
-import cipher.bean.PassonConstants;
+import cipher.SBox;
 import static cipher.util.JoinOperations.join;
 import static cipher.util.JoinOperations.joinBytes;
 import cipher.util.Permutations;

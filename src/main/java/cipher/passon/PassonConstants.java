@@ -1,4 +1,4 @@
-package cipher.bean;
+package cipher.passon;
 
 /**
  * Constantes do algoritmo.

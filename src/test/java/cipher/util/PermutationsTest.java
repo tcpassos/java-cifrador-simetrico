@@ -17,8 +17,6 @@ public class PermutationsTest {
     public void unpermute32Test() {
         BigInteger permuted = BigInteger.valueOf(0b11000011101101010000101111000011L);
         BigInteger nonPermuted = BigInteger.valueOf(0b10110010110010011110001011010001L);
-        // 1101 0100 1011 0010 1111 1001 0000 0101
-        // 1011 0010 1100 1001 1110 0010 1101 0001
         assertEquals(nonPermuted, Permutations.unpermute32(permuted));
     }
     

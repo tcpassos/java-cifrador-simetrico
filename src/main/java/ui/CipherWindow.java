@@ -1,6 +1,8 @@
 package ui;
 
-import cipher.PassonCipher;
+import cipher.BlockCipher;
+import cipher.FileEncryptor;
+import cipher.passon.PassonBlockCipher;
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -14,7 +16,6 @@ public class CipherWindow extends javax.swing.JFrame {
 
     private File file;
     private JFileChooser fileChooser;
-    private PassonCipher encryptor;
     
     /**
      * Creates new form CipherWindow
@@ -115,22 +116,25 @@ public class CipherWindow extends javax.swing.JFrame {
     private void jFileChooserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jFileChooserActionPerformed
         if (fileChooser.showOpenDialog(CipherWindow.this) == JFileChooser.APPROVE_OPTION) {
             file = fileChooser.getSelectedFile();
-            encryptor = new PassonCipher(file);
             jFilePath.setText(file.getAbsolutePath());
         }
     }//GEN-LAST:event_jFileChooserActionPerformed
 
     private void jEncryptButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jEncryptButtonActionPerformed
+        BlockCipher blockCipher = new PassonBlockCipher(jPasswordField.getText());
+        FileEncryptor fileEncryptor = new FileEncryptor(file, blockCipher);
         try {
-            encryptor.encrypt(jPasswordField.getText());
+            fileEncryptor.encrypt();
         } catch (IOException ex) {
             Logger.getLogger(CipherWindow.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jEncryptButtonActionPerformed
 
     private void jDecryptButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jDecryptButtonActionPerformed
+        BlockCipher blockCipher = new PassonBlockCipher(jPasswordField.getText());
+        FileEncryptor fileEncryptor = new FileEncryptor(file, blockCipher);
         try {
-            encryptor.decrypt(jPasswordField.getText());
+            fileEncryptor.decrypt();
         } catch (IOException ex) {
             Logger.getLogger(CipherWindow.class.getName()).log(Level.SEVERE, null, ex);
         }
