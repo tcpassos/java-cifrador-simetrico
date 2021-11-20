@@ -1,7 +1,7 @@
-package cipher;
+package core.util;
 
-import cipher.util.JoinOperations;
-import cipher.util.SplitOperations;
+import core.util.JoinOperations;
+import core.util.SplitOperations;
 import java.math.BigInteger;
 
 /**

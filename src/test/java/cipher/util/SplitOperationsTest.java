@@ -1,5 +1,6 @@
 package cipher.util;
 
+import core.util.SplitOperations;
 import java.math.BigInteger;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;

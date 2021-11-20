@@ -1,4 +1,4 @@
-package cipher.blockstream;
+package core.blockstream;
 
 import java.io.EOFException;
 import java.io.IOException;

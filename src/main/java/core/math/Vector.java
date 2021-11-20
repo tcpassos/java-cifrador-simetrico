@@ -1,4 +1,4 @@
-package cipher.math;
+package core.math;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

@@ -1,11 +1,11 @@
 package cipher.passon;
 
-import cipher.SBox;
-import static cipher.util.JoinOperations.join;
-import static cipher.util.JoinOperations.joinBytes;
-import cipher.util.Permutations;
-import static cipher.util.ShiftOperations.circularShiftLeft;
-import static cipher.util.SplitOperations.getByteSegments;
+import core.util.SBox;
+import static core.util.JoinOperations.join;
+import static core.util.JoinOperations.joinBytes;
+import core.util.Permutations;
+import static core.util.ShiftOperations.circularShiftLeft;
+import static core.util.SplitOperations.getByteSegments;
 import java.math.BigInteger;
 
 /**

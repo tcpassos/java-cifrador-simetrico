@@ -1,10 +1,10 @@
 package cipher.passon;
 
 import cipher.BlockCipher;
-import cipher.SBox;
-import cipher.util.JoinOperations;
-import cipher.util.Permutations;
-import cipher.util.SplitOperations;
+import core.util.SBox;
+import core.util.JoinOperations;
+import core.util.Permutations;
+import core.util.SplitOperations;
 import java.math.BigInteger;
 
 /**

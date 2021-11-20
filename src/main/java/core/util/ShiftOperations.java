@@ -1,4 +1,4 @@
-package cipher.util;
+package core.util;
 
 import java.util.Arrays;
 

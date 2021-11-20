@@ -1,6 +1,6 @@
 package cipher;
 
-import cipher.blockstream.InputBlockStream;
+import core.blockstream.InputBlockStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -21,7 +21,6 @@ public class FileEncryptor {
     }
     
     public void encrypt() throws IOException {
-        int[] block = new int[blockCipher.getBlockSize()];
         File outputFile = new File(file.getParent(), file.getName() + ".pson");
         try (FileInputStream reader = new FileInputStream(file);
              FileOutputStream writer = new FileOutputStream(outputFile)) {
@@ -29,22 +28,21 @@ public class FileEncryptor {
             _writeHeader(writer);
             // Le o arquivo enquanto existirem bytes disponiveis
             while(bstream.hasNext()) {
-                block = bstream.nextBlock();
+                int[] block = bstream.nextBlock();
                 _writeBytes(writer, blockCipher.encrypt(block));
             }
         }
     }
 
     public void decrypt() throws IOException {
-        int[] block = new int[blockCipher.getBlockSize()];
         File outputFile = new File(file.getParent(), _getFileNameWithoutExtension(file));
         try (FileInputStream reader = new FileInputStream(file);
              FileOutputStream writer = new FileOutputStream(outputFile)) {
             InputBlockStream bstream = new InputBlockStream(reader, blockCipher.getBlockSize());
             int padding = reader.read();
-            // Le o arquivo enquanto existirem bytes disponiveis
+            // Le o arquivo enquanto existirem bytes disponiveis 
             while(bstream.hasNext()) {
-                block = bstream.nextBlock();
+                int[] block = bstream.nextBlock();
                 if (bstream.hasNext()) {
                     _writeBytes(writer, blockCipher.decrypt(block));
                 } else {
