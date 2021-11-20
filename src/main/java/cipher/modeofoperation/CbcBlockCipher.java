@@ -1,6 +1,7 @@
 package cipher.modeofoperation;
 
 import cipher.BlockCipher;
+import core.math.Generators;
 import core.util.JoinOperations;
 import core.util.SplitOperations;
 import java.math.BigInteger;
@@ -15,7 +16,7 @@ public class CbcBlockCipher implements BlockCipher {
     
     public CbcBlockCipher(BlockCipher encryptor) {
         this.encryptor = encryptor;
-        this.salt = BigInteger.ONE;
+        this.salt = Generators.decimalsOfPi(encryptor.getBlockSize());
     }
 
     @Override

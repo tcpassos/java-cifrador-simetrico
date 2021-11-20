@@ -4,6 +4,7 @@ import cipher.BlockCipher;
 import cipher.FileEncryptor;
 import cipher.modeofoperation.CbcBlockCipher;
 import cipher.passon.PassonBlockCipher;
+import core.math.Generators;
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
