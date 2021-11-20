@@ -2,6 +2,7 @@ package ui;
 
 import cipher.BlockCipher;
 import cipher.FileEncryptor;
+import cipher.modeofoperation.CbcBlockCipher;
 import cipher.passon.PassonBlockCipher;
 import java.io.File;
 import java.io.IOException;
@@ -121,25 +122,27 @@ public class CipherWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_jFileChooserActionPerformed
 
     private void jEncryptButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jEncryptButtonActionPerformed
-        BlockCipher blockCipher = new PassonBlockCipher(jPasswordField.getText());
-        FileEncryptor fileEncryptor = new FileEncryptor(file, blockCipher);
         try {
-            fileEncryptor.encrypt();
+            _getFileEncryptor().encrypt();
         } catch (IOException ex) {
             Logger.getLogger(CipherWindow.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jEncryptButtonActionPerformed
 
     private void jDecryptButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jDecryptButtonActionPerformed
-        BlockCipher blockCipher = new PassonBlockCipher(jPasswordField.getText());
-        FileEncryptor fileEncryptor = new FileEncryptor(file, blockCipher);
         try {
-            fileEncryptor.decrypt();
+            _getFileEncryptor().decrypt();
         } catch (IOException ex) {
             Logger.getLogger(CipherWindow.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jDecryptButtonActionPerformed
 
+    private FileEncryptor _getFileEncryptor() {
+        BlockCipher blockCipher = new PassonBlockCipher(jPasswordField.getText());
+        BlockCipher modeOfOperation = new CbcBlockCipher(blockCipher);
+        return new FileEncryptor(file, modeOfOperation);
+    }
+    
     /**
      * @param args the command line arguments
      */

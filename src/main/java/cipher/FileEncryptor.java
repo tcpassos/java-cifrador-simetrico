@@ -35,7 +35,7 @@ public class FileEncryptor {
     }
 
     public void decrypt() throws IOException {
-        File outputFile = new File(file.getParent(), _getFileNameWithoutExtension(file));
+        File outputFile = new File(file.getParent(), _getFileNameWithoutExtension(file) + ".dec");
         try (FileInputStream reader = new FileInputStream(file);
              FileOutputStream writer = new FileOutputStream(outputFile)) {
             InputBlockStream bstream = new InputBlockStream(reader, blockCipher.getBlockSize());
