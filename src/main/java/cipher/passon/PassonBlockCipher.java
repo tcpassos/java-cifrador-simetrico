@@ -33,22 +33,13 @@ public class PassonBlockCipher implements BlockCipher, PassonConstants {
     @Override
     public int[] decrypt(int[] block) {
         BigInteger decryptedBlock = JoinOperations.joinBytes(block);
-        _invertArray(keys);
-        for(long key: keys) {
+        for (int i=keys.length-1; i>=0; i--) {
             // TODO: Gerar e aplicar funcoes no o vetor
-            decryptedBlock = decryptedBlock.xor(BigInteger.valueOf(key));
+            decryptedBlock = decryptedBlock.xor(BigInteger.valueOf(keys[i]));
             decryptedBlock = SBox.reverse(decryptedBlock, BLOCK_SIZE);
             decryptedBlock = Permutations.unpermute48(decryptedBlock);
         }
         return SplitOperations.getByteSegments(decryptedBlock, block.length);
-    }
-
-    private void _invertArray(long[] array) {
-        for (int i = 0; i < array.length / 2; i++) {
-            long temp = array[i];
-            array[i] = array[array.length - 1 - i];
-            array[array.length - 1 - i] = temp;
-        }
     }
 
     @Override

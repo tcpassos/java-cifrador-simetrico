@@ -3,6 +3,7 @@ package cipher.blockstream;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 
 /**
  * Classe para a leitura de um arquivo em blocos.
@@ -30,11 +31,10 @@ public class InputBlockStream {
             throw new EOFException();
         }
         allocatedInBuffer -= blockSize;
-        return buffer;
-    }
-    
-    public int getPadding() {
-        return blockSize - Math.abs(allocatedInBuffer);
+        int[] next = new int[buffer.length];
+        System.arraycopy(buffer, 0, next, 0, buffer.length);
+        Arrays.fill(buffer, 0);
+        return next;
     }
     
     private boolean _fetch() throws IOException {
@@ -42,9 +42,10 @@ public class InputBlockStream {
             return true;
         }
         int next = reader.read();
-        while(allocatedInBuffer < blockSize && next != -1) {
+        while(next != -1) {
             buffer[allocatedInBuffer] = next;
             allocatedInBuffer++;
+            if (allocatedInBuffer == blockSize) break;
             next = reader.read();
         }
         return allocatedInBuffer > 0;

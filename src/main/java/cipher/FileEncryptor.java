@@ -6,7 +6,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Arrays;
 
 /**
  * Classe responsável pela criptografia e deciframento de arquivos.
@@ -27,10 +26,9 @@ public class FileEncryptor {
         try (FileInputStream reader = new FileInputStream(file);
              FileOutputStream writer = new FileOutputStream(outputFile)) {
             InputBlockStream bstream = new InputBlockStream(reader, blockCipher.getBlockSize());
-            _writeHeaders(writer);
+            _writeHeader(writer);
             // Le o arquivo enquanto existirem bytes disponiveis
             while(bstream.hasNext()) {
-                Arrays.fill(block, (byte) 0);
                 block = bstream.nextBlock();
                 _writeBytes(writer, blockCipher.encrypt(block));
             }
@@ -43,11 +41,15 @@ public class FileEncryptor {
         try (FileInputStream reader = new FileInputStream(file);
              FileOutputStream writer = new FileOutputStream(outputFile)) {
             InputBlockStream bstream = new InputBlockStream(reader, blockCipher.getBlockSize());
+            int padding = reader.read();
             // Le o arquivo enquanto existirem bytes disponiveis
             while(bstream.hasNext()) {
-                Arrays.fill(block, (byte) 0);
                 block = bstream.nextBlock();
-                _writeBytes(writer, blockCipher.decrypt(block));
+                if (bstream.hasNext()) {
+                    _writeBytes(writer, blockCipher.decrypt(block));
+                } else {
+                    _writeBytesWithPadding(writer, blockCipher.decrypt(block), padding);
+                }
             }
         }
     }
@@ -65,8 +67,14 @@ public class FileEncryptor {
             writer.write(b);
         }
     }
+
+    private void _writeBytesWithPadding(OutputStream writer, int[] bytes, int padding) throws IOException {
+        for (int i=0; i<bytes.length - padding; i++) {
+            writer.write(bytes[i]);
+        }
+    }
     
-    private void _writeHeaders(OutputStream writer) throws IOException {
+    private void _writeHeader(OutputStream writer) throws IOException {
         int blockSize = blockCipher.getBlockSize();
         int remainder = (int) (file.length() % blockSize);
         int padding = remainder == 0 ? 0 : blockSize - remainder;
