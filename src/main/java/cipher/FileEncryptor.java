@@ -1,6 +1,7 @@
 package cipher;
 
 import core.blockstream.InputBlockStream;
+import core.util.Files;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -21,7 +22,7 @@ public class FileEncryptor {
     }
     
     public void encrypt() throws IOException {
-        File outputFile = new File(file.getParent(), file.getName() + ".pson");
+        File outputFile = Files.appendExtension(file, "pson");
         try (FileInputStream reader = new FileInputStream(file);
              FileOutputStream writer = new FileOutputStream(outputFile)) {
             InputBlockStream bstream = new InputBlockStream(reader, blockCipher.getBlockSize());
@@ -35,7 +36,7 @@ public class FileEncryptor {
     }
 
     public void decrypt() throws IOException {
-        File outputFile = new File(file.getParent(), _getFileNameWithoutExtension(file) + ".dec");
+        File outputFile = Files.changeExtension(file, "dec");
         try (FileInputStream reader = new FileInputStream(file);
              FileOutputStream writer = new FileOutputStream(outputFile)) {
             InputBlockStream bstream = new InputBlockStream(reader, blockCipher.getBlockSize());
@@ -51,15 +52,7 @@ public class FileEncryptor {
             }
         }
     }
-    
-    private String _getFileNameWithoutExtension(File file) {
-        String filename = file.getName();
-        if (filename.contains(".")) {
-            filename = filename.substring(0, filename.lastIndexOf('.'));
-        }
-        return filename;
-    }
-    
+
     private void _writeBytes(OutputStream writer, int[] bytes) throws IOException {
         for(int b: bytes) {
             writer.write(b);

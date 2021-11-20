@@ -30,19 +30,18 @@
                       <Component id="jFileChooser" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="jFilePath" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="32767" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jPasswordField" pref="93" max="32767" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jPasswordField" min="-2" pref="85" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="jEncryptButton" min="-2" pref="120" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jDecryptButton" min="-2" pref="120" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
                   </Group>
               </Group>
+              <EmptySpace pref="99" max="32767" attributes="0"/>
           </Group>
           <Component id="jSeparator1" max="32767" attributes="0"/>
       </Group>
@@ -84,6 +83,9 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="jPasswordField">
+      <Events>
+        <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="jPasswordFieldKeyTyped"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel2">
       <Properties>
@@ -95,6 +97,7 @@
     <Component class="javax.swing.JButton" name="jEncryptButton">
       <Properties>
         <Property name="text" type="java.lang.String" value="Criptografar"/>
+        <Property name="enabled" type="boolean" value="false"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jEncryptButtonActionPerformed"/>
@@ -103,6 +106,7 @@
     <Component class="javax.swing.JButton" name="jDecryptButton">
       <Properties>
         <Property name="text" type="java.lang.String" value="Descriptografar"/>
+        <Property name="enabled" type="boolean" value="false"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jDecryptButtonActionPerformed"/>

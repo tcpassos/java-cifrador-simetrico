@@ -4,12 +4,13 @@ import cipher.BlockCipher;
 import cipher.FileEncryptor;
 import cipher.modeofoperation.CbcBlockCipher;
 import cipher.passon.PassonBlockCipher;
-import core.math.Generators;
+import core.util.Files;
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 
 /**
  * Janela principal.
@@ -55,9 +56,16 @@ public class CipherWindow extends javax.swing.JFrame {
 
         jFilePath.setText("Nenhum arquivo selecionado");
 
+        jPasswordField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jPasswordFieldKeyTyped(evt);
+            }
+        });
+
         jLabel2.setText("Senha");
 
         jEncryptButton.setText("Criptografar");
+        jEncryptButton.setEnabled(false);
         jEncryptButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jEncryptButtonActionPerformed(evt);
@@ -65,6 +73,7 @@ public class CipherWindow extends javax.swing.JFrame {
         });
 
         jDecryptButton.setText("Descriptografar");
+        jDecryptButton.setEnabled(false);
         jDecryptButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jDecryptButtonActionPerformed(evt);
@@ -81,17 +90,16 @@ public class CipherWindow extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jFileChooser)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jFilePath)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jFilePath))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPasswordField, javax.swing.GroupLayout.DEFAULT_SIZE, 93, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPasswordField, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jEncryptButton, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jDecryptButton, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18))))
+                        .addComponent(jDecryptButton, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(99, Short.MAX_VALUE))
             .addComponent(jSeparator1)
         );
         layout.setVerticalGroup(
@@ -119,12 +127,15 @@ public class CipherWindow extends javax.swing.JFrame {
         if (fileChooser.showOpenDialog(CipherWindow.this) == JFileChooser.APPROVE_OPTION) {
             file = fileChooser.getSelectedFile();
             jFilePath.setText(file.getAbsolutePath());
+            jEncryptButton.setEnabled(true);
+            jDecryptButton.setEnabled(Files.checkExtensionName(file, "pson"));
         }
     }//GEN-LAST:event_jFileChooserActionPerformed
 
     private void jEncryptButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jEncryptButtonActionPerformed
         try {
             _getFileEncryptor().encrypt();
+            JOptionPane.showMessageDialog(null, "O arquivo " + file.getName() + " foi codificado com sucesso!");
         } catch (IOException ex) {
             Logger.getLogger(CipherWindow.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -133,10 +144,16 @@ public class CipherWindow extends javax.swing.JFrame {
     private void jDecryptButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jDecryptButtonActionPerformed
         try {
             _getFileEncryptor().decrypt();
+            JOptionPane.showMessageDialog(null, "O arquivo " + file.getName() + " foi decodificado com sucesso!");
         } catch (IOException ex) {
             Logger.getLogger(CipherWindow.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jDecryptButtonActionPerformed
+
+    private void jPasswordFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jPasswordFieldKeyTyped
+        // Filtro para permitir apenas 4 caracteres
+        if (jPasswordField.getText().length() >= 4) evt.consume();
+    }//GEN-LAST:event_jPasswordFieldKeyTyped
 
     private FileEncryptor _getFileEncryptor() {
         BlockCipher blockCipher = new PassonBlockCipher(jPasswordField.getText());
