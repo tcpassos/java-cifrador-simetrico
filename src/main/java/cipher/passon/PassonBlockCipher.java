@@ -4,6 +4,7 @@ import cipher.BlockCipher;
 import core.util.SBox;
 import core.util.JoinOperations;
 import core.util.Permutations;
+import core.util.ShiftOperations;
 import core.util.SplitOperations;
 import java.math.BigInteger;
 
@@ -25,7 +26,9 @@ public class PassonBlockCipher implements BlockCipher, PassonConstants {
             encryptedBlock = Permutations.permute48(encryptedBlock);
             encryptedBlock = SBox.transform(encryptedBlock, BLOCK_SIZE);
             encryptedBlock = encryptedBlock.xor(BigInteger.valueOf(key));
-            // TODO: Gerar e aplicar funcoes no o vetor
+            int shift = (int) (key % (Byte.SIZE * BLOCK_SIZE/2));
+            long shiftedBlock = ShiftOperations.circularShiftLeft(encryptedBlock.longValue(), BLOCK_SIZE * Byte.SIZE, shift);
+            encryptedBlock = BigInteger.valueOf(shiftedBlock);
         }
         return SplitOperations.getByteSegments(encryptedBlock, block.length);
     }
@@ -34,7 +37,9 @@ public class PassonBlockCipher implements BlockCipher, PassonConstants {
     public int[] decrypt(int[] block) {
         BigInteger decryptedBlock = JoinOperations.joinBytes(block);
         for (int i=keys.length-1; i>=0; i--) {
-            // TODO: Gerar e aplicar funcoes no o vetor
+            int shift = (int) (keys[i] % (Byte.SIZE * BLOCK_SIZE/2));
+            long shiftedBlock = ShiftOperations.circularShiftRight(decryptedBlock.longValue(), BLOCK_SIZE * Byte.SIZE, shift);
+            decryptedBlock = BigInteger.valueOf(shiftedBlock);
             decryptedBlock = decryptedBlock.xor(BigInteger.valueOf(keys[i]));
             decryptedBlock = SBox.reverse(decryptedBlock, BLOCK_SIZE);
             decryptedBlock = Permutations.unpermute48(decryptedBlock);
