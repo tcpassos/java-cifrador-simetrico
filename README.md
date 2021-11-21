@@ -14,7 +14,8 @@ O processo de key scheduling recebe uma chave de 4 bytes do usuário e tem iníc
 Em seguida são geradas 5 sub-chaves de 6 bytes ao executar 5 rounds do seguinte processamento:<br>
 Os 4 bytes da chave (A, B, C e D) são dispostos em uma matriz 2x2 e sofrem uma expansão para uma matriz 3x3, gerando os bytes (E, F, G, H e I). A geração de cada byte da periferia da matriz 3x3 é dado a partir de uma operação XOR dos 2 bytes que estiverem na mesma linha (horizontal) ou na mesma coluna (vertical) dessa matriz, mas antes esses 2 bytes são deslocados de acordo com sua posição, que pode resultar em um deslocamento de 1 ou 2 bits para esquerda.<br>
 Após a expansão para 9 bytes são geradas 2 partes da sub-chave e, em seguida, as partes são unidas em uma única chave. A primeira parte com 3 bytes é resultante da operação XOR entre a sequência de bytes [A, B, E] com os bytes [H, I, G]. Já a segunda parte é resultante de uma operação XOR entre [C, D, F] e [I, G, H].<br>
-Após a geração da sub-chave K(n) os bytes [E, F, G, H] da matriz 3x3 assumem a posição de [A, B, C, D] em uma nova matriz 2x2 e iniciam o próximo round a partir da expansão da matriz.
+Após a geração da sub-chave K(n) os bytes [E, F, G, H] da matriz 3x3 assumem a posição de [A, B, C, D] em uma nova matriz 2x2 e iniciam o próximo round a partir da expansão da matriz.<br>
+Neste algoritmo de key-scheduling buscamos utilizar o espaço dos bits que constituem a chave de forma igualmente distribuída e equilibrada. Além da permutação e substituição de bits inicial que aumentaram os aspectos de difusão e confusão do processo, procuramos maximizar essas propriedades ao deslocar os bits dos sub-blocos da matriz antes de realizar a operação XOR entre eles.
 
 ## Implementando um cifrador de bloco
 A interface `BlockCipher` possui contratos para a implementação de um algoritmo para criptografar um bloco.
@@ -54,6 +55,8 @@ O processo de criptografia consiste em executar 5 rounds com as seguintes etapas
  - S-box
  - Operação XOR entre o bloco e a sub-chave
  - Deslocamento circular dos bits do bloco de acordo com o valor da sub-chave
+
+Pode ser levado em consideração que o deslocamento final dificilmente será o mesmo já que ele é dependente do valor da sub-chave.
 
 ![Key scheduling](https://i.imgur.com/XaVhBLd.png)
 
