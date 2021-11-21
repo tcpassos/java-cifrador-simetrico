@@ -46,6 +46,7 @@ public class CipherWindow extends javax.swing.JFrame {
         jDecryptButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Cifrador Simétrico de Bloco");
 
         jFileChooser.setText("Selecionar arquivo");
         jFileChooser.addActionListener(new java.awt.event.ActionListener() {

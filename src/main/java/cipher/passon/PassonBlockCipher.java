@@ -23,9 +23,13 @@ public class PassonBlockCipher implements BlockCipher, PassonConstants {
     public int[] encrypt(int[] block) {
         BigInteger encryptedBlock = JoinOperations.joinBytes(block);
         for(long key: keys) {
+            // P-box 32 bits -> 32 bits
             encryptedBlock = Permutations.permute48(encryptedBlock);
+            // S-box
             encryptedBlock = SBox.transform(encryptedBlock, BLOCK_SIZE);
+            // bloco XOR K(n)
             encryptedBlock = encryptedBlock.xor(BigInteger.valueOf(key));
+            // bloco << K(n)
             int shift = (int) (key % (Byte.SIZE * BLOCK_SIZE/2));
             long shiftedBlock = ShiftOperations.circularShiftLeft(encryptedBlock.longValue(), BLOCK_SIZE * Byte.SIZE, shift);
             encryptedBlock = BigInteger.valueOf(shiftedBlock);
