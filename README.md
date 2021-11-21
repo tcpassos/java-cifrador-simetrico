@@ -1,6 +1,7 @@
 ﻿# Java Cifrador Simétrico
 Simples algoritmo para a criptografia e deciframento de arquivos em blocos de 48 bits, usando uma chave de 32 bits.
 ![Janela principal do programa](https://i.imgur.com/7JgsmNi.png)
+ <br>
  A criptografia do arquivo conta com 3 etapas:<br>
   - Key Scheduling:
   - Criptografia em blocos
@@ -9,10 +10,10 @@ Simples algoritmo para a criptografia e deciframento de arquivos em blocos de 48
 ## Key Scheduling
 A classe `PassonKey` é responsável pela geração das sub-chaves usadas no algoritmo de criptografia.
 ![Key scheduling](https://i.imgur.com/tSLr2Yh.png)
-O processo de key scheduling recebe uma chave de 4 bytes do usuário e tem início submetendo essa chave a um processo de permutação de 32 bits para 32 bits, seguido da aplicação da S-Box nos bytes resultantes.
-Em seguida são geradas 5 sub-chaves de 6 bytes ao executar 5 rounds do seguinte processamento:
-Os 4 bytes da chave (A, B, C e D) são dispostos em uma matriz 2x2 e sofrem uma expansão para uma matriz 3x3, gerando os bytes (E, F, G, H e I). A geração de cada byte da periferia da matriz 3x3 é dado a partir de uma operação XOR dos 2 bytes que estiverem na mesma linha (horizontal) ou na mesma coluna (vertical) dessa matriz, mas antes esses 2 bytes são deslocados de acordo com sua posição, que pode resultar em um deslocamento de 1 ou 2 bits para esquerda.
-Após a expansão para 9 bytes são geradas 2 partes da sub-chave e, em seguida, as partes são unidas em uma única chave. A primeira parte com 3 bytes é resultante da operação XOR entre a sequência de bytes [A, B, E] com os bytes [H, I, G]. Já a segunda parte é resultante de uma operação XOR entre [C, D, F] e [I, G, H].
+O processo de key scheduling recebe uma chave de 4 bytes do usuário e tem início submetendo essa chave a um processo de permutação de 32 bits para 32 bits, seguido da aplicação da S-Box nos bytes resultantes.<br>
+Em seguida são geradas 5 sub-chaves de 6 bytes ao executar 5 rounds do seguinte processamento:<br>
+Os 4 bytes da chave (A, B, C e D) são dispostos em uma matriz 2x2 e sofrem uma expansão para uma matriz 3x3, gerando os bytes (E, F, G, H e I). A geração de cada byte da periferia da matriz 3x3 é dado a partir de uma operação XOR dos 2 bytes que estiverem na mesma linha (horizontal) ou na mesma coluna (vertical) dessa matriz, mas antes esses 2 bytes são deslocados de acordo com sua posição, que pode resultar em um deslocamento de 1 ou 2 bits para esquerda.<br>
+Após a expansão para 9 bytes são geradas 2 partes da sub-chave e, em seguida, as partes são unidas em uma única chave. A primeira parte com 3 bytes é resultante da operação XOR entre a sequência de bytes [A, B, E] com os bytes [H, I, G]. Já a segunda parte é resultante de uma operação XOR entre [C, D, F] e [I, G, H].<br>
 Após a geração da sub-chave K(n) os bytes [E, F, G, H] da matriz 3x3 assumem a posição de [A, B, C, D] em uma nova matriz 2x2 e iniciam o próximo round a partir da expansão da matriz.
 
 ## Implementando um cifrador de bloco
@@ -81,7 +82,7 @@ while(bstream.hasNext()) {
 ```
 
 ## Tratamento de padding
-A classe `FileEncriptor` é responsável por criptografar e descriptografar um arquivo de acordo com o `BlockCipher` recebido em seu construtor. Essa classe conta com um tratamento de padding, evitando que bytes adicionais sejam escritos no arquivo após decodificado.
+A classe `FileEncriptor` é responsável por criptografar e descriptografar um arquivo de acordo com o `BlockCipher` recebido em seu construtor. Essa classe conta com um tratamento de padding, evitando que bytes adicionais sejam escritos no arquivo após decodificado.<br>
 Para isso é escrito no primeiro byte do arquivo codificado o padding que deverá ser desconsiderado durante a decodificação:
 ```java
 private void _writeHeader(OutputStream writer) throws IOException {
